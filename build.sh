@@ -1,4 +1,8 @@
 #!/bin/bash
+#
+# build.sh: This script builds the frontend reactjs application and
+# makes it available to the Flask web server.
+#
 
 # Remove previous react app bundles
 rm -r static/app.js
@@ -12,7 +16,7 @@ popd >/dev/null
 # Hash the file to prevent browser caching
 hash=$(sha256sum static/app.js | head -c16)
 
-# Create the index.html file if not exist, update the hash to the script path
+# Create the index.html file if not exist
 if [ ! -f /tmp/foo.txt ]; then
     cat > templates/index.html <<EOF
 <!DOCTYPE html>
@@ -28,5 +32,9 @@ if [ ! -f /tmp/foo.txt ]; then
 </html>
 EOF
 fi
+
+# Rename the bundled react app file using the hash
 mv static/app.js static/app.$hash.js
+
+# update the hash to the react app's script path in index.html
 sed -i "s/app[.0-9a-f]*\.js/app.$hash.js/" templates/index.html
