@@ -1,3 +1,4 @@
+/* global document */
 import Body from "./components/Body";
 import React from "react";
 import ReactDOM from "react-dom";
