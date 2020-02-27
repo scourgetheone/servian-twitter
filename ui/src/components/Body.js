@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { makeStyles } from '@material-ui/core/styles';
 import {
     Snackbar,
     Grid,
@@ -9,33 +8,28 @@ import {
 import MuiAlert from '@material-ui/lab/Alert';
 import 'typeface-roboto';
 import request from 'superagent';
+import io from 'socket.io-client';
+const env = process.env.NODE_ENV;
 
 import Tweet from 'components/Tweet';
+import MainStyles from 'styles/MainStyles';
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
-
-const useStyles = makeStyles(theme => ({
-    root: {
-      flexGrow: 1,
-    },
-    title: {
-        textAlign: 'center',
-    },
-    servianFont: {
-        color: 'orange',
-        'font-weight': 'bold'
-    },
-}));
 
 /**
  * The Body component renders the main page, including the welcoming header,
  * and the the list of tweets from the back-end.
  */
 export default function Body() {
-    // Initialize React states and effects //
+    /** Initialize React states and effects
+     *
+     */
     const [errorMessage, setErrorMessage] = useState('');
+    // This socket object is used for setting up the websocket connection
+    // and making sure that we only establish the connection up once.
+    const [socket, setSocket] = useState(null);
     // Store the raw json data from the backend
     const [data, setData] = useState(null);
     // Save the list of tweets separately, so that we can add real-time tweets later
@@ -54,14 +48,48 @@ export default function Body() {
             });
     };
 
-    /* NOTE: pass [data.length] in to tell React to stop applying the effect
-    if there hasn't been any new data.
-    */
+    /** NOTE: pass [data.length] in useEffect to tell React to stop applying
+     * the effect if there hasn't been any new data. Nevertheless, there will
+     * not be new data as we only fetch the initial data from the backend once.
+     */
     useEffect(() => {
         fetchData();
+
+        /** Socket.io event handlers
+         *
+         */
+        let http = 'http://';
+        if (env === 'production') {
+            http = 'https://';
+        }
+
+        if (!socket) {
+            const _socket = io(http + document.domain + ':' + location.port);
+            setSocket(_socket);
+
+            // Verify that the connection is working
+            _socket.on('connect', function() {
+                console.log('Websocket connected!');
+            });
+
+            // Handle the here_are_tweets event from the backend
+            _socket.on('here_are_tweets', function(tweet) {
+                console.log('tweet received', tweet);
+                setTweets((tweets) => {
+                    let newTweets = [].concat(tweets);
+                    newTweets.unshift(tweet);
+                    // Show a maximum of 100 tweets on the screen
+                    newTweets = newTweets.slice(0,100);
+                    return newTweets;
+                });
+            });
+        }
+
     }, [data && data.length]);
 
-    // Display tweet information that was fetched from the back-end //
+    /** Display tweet information that was fetched from the back-end
+     *
+     */
     let tweetsDisplay = <Grid item xs={12}>
         <Grid container justify="center">
             <CircularProgress />
@@ -69,15 +97,26 @@ export default function Body() {
     </Grid>;
     let streamKeyword;
 
-    if (data) {
-        tweetsDisplay = tweets.map((tweetData, i) => <Tweet key={i} tweetData={tweetData}/>);
+    if (data && tweets) {
+        tweetsDisplay = tweets.map((tweetData, i) => {
+            if (i==0) {
+                tweetData.fade = true;
+            } else {
+                tweetData.fade = false;
+            }
+            return <Tweet key={i} tweetData={tweetData}/>;
+        });
         streamKeyword = data.stream_keyword;
     }
 
-    // Use the customized styling classes //
-    const classes = useStyles();
+    /** Use the customized styling classes
+     *
+     */
+    const classes = MainStyles();
 
-    // Handle the logic for the error message snackbar //
+    /** Handle the logic for the error message snackbar
+     *
+     */
     const handleCloseErrorSnackBar = (event, reason) => {
         if (reason === 'clickaway') {
             return;
