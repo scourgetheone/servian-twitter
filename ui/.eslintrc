@@ -1,6 +1,6 @@
 {
     "parserOptions": {
-        "ecmaVersion": 6,
+        "ecmaVersion": 9,
         "sourceType": "module",
         "ecmaFeatures": {
             "jsx": true
@@ -10,5 +10,14 @@
         "semi": "error",
         "no-const-assign": 2,
         "no-undef": 2
+    },
+    "globals": {
+        "console": "readonly",
+        "document": "readonly",
+        "window": "readonly",
+        "location": "readonly",
+        "process": "readonly",
+        "setTimeout": "readonly",
+        "clearTimeout": "readonly"
     }
 }
