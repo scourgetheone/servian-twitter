@@ -6,12 +6,14 @@ import json
 # Google Datastore Entity definitions
 class Tweet(ndb.Model):
     """Tweet entity stores basic information about a tweet"""
-    stream_keyword = ndb.StringProperty()
-    created_at = ndb.StringProperty()
-    hashtags = ndb.StringProperty()
-    text = ndb.StringProperty()
-    user = ndb.StringProperty()
-    user_loc = ndb.StringProperty()
+    id = ndb.StringProperty()
+    avatar_color_index = ndb.IntegerProperty() # We generate a unique index for the UI's avatar display
+    stream_keyword = ndb.StringProperty() # The keyword used in the stream that fetched this tweet
+    created_at = ndb.DateTimeProperty() # Datetime when the tweet was made (converted to UTC)
+    hashtags = ndb.StringProperty() # A space-separated list of hashtags used in the tweet
+    text = ndb.StringProperty() # The tweet content
+    user = ndb.StringProperty() # The username
+    user_loc = ndb.StringProperty() # The user's location
 
 class SystemConfig(ndb.Model):
     """SystemConfig entity stores key value entities
