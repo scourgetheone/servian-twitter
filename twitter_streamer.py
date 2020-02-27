@@ -1,4 +1,4 @@
-from twython import TwythonStreamer
+import tweepy
 from google_cloud import (
     Tweet,
     SystemConfig,
@@ -10,14 +10,13 @@ import datetime
 import random
 
 
-# Create a class that inherits TwythonStreamer
-class ServianTwitterStreamer(TwythonStreamer):
-    """A custom Twitter streamer class inherited from TwythonStreamer
+class ServianTwitterStreamer(tweepy.StreamListener):
+    """A custom Twitter streamer class inherited from tweepy.StreamListener
 
     ServianTwitterStreamer.__init__():
 
         Args:
-            stream_keyword (str): a keyword that we are tracking using the TwythonStreamer
+            stream_keyword (str): a keyword that we are tracking using the StreamListener
             on_receive_tweet (func): a callback function used when a tweet matching the
             stream keyword is received.
 
@@ -25,17 +24,36 @@ class ServianTwitterStreamer(TwythonStreamer):
 
     on_receive_tweet = None
     stream_keyword = None
+    google_client = None
 
     def __init__(self,
         stream_keyword,
-        *args,
         on_receive_tweet=lambda x: None,
         on_error=lambda x: None,
-        **kwargs):
-        super().__init__(*args, **kwargs)
+        ):
+        super().__init__()
         self.stream_keyword = stream_keyword
         self.on_receive_tweet = on_receive_tweet
         self.on_error = on_error
+        self.google_client = init_google_cloud_client()
+
+    # Received data
+    def on_status(self, data):
+        data = data._json
+
+        # Only collect tweets in English
+        if data['lang'] == 'en':
+            tweet = self.process_tweet(data)
+            print('got tweet', tweet)
+            self.save_to_datastore(tweet)
+            self.on_receive_tweet(tweet)
+
+    # Problem with the API
+    def on_error(self, status_code, data):
+        print(status_code, data)
+        self.on_error(status_code, data)
+        # uncomment if we do *not* want to retry the stream
+        #self.disconnect()
 
     def process_tweet(self, tweet):
         """Filter out unwanted data from a tweet
@@ -63,25 +81,10 @@ class ServianTwitterStreamer(TwythonStreamer):
         )
         return tweet_entity
 
-    # Received data
-    def on_success(self, data):
-        # Only collect tweets in English
-        if data['lang'] == 'en':
-            tweet = self.process_tweet(data)
-            print('got tweet', tweet)
-            self.save_to_datastore(tweet)
-            self.on_receive_tweet(tweet)
-
-    # Problem with the API
-    def on_error(self, status_code, data):
-        print(status_code, data)
-        self.on_error(status_code, data)
-        # uncomment if we do *not* want to retry the stream
-        #self.disconnect()
-
     # Save each tweet to Google's Datastore
     def save_to_datastore(self, tweet):
-        tweet.put()
+        with self.google_client.context():
+            tweet.put()
 
 REQUIRED_PARAMS = ['TWITTER_API_KEY', 'TWITTER_API_SECRET', 'TWITTER_ACCESS_TOKEN', 'TWITTER_ACCESS_SECRET']
 
@@ -113,23 +116,26 @@ def create_new_stream(
         assert DB_CONFIG[required_param], "{} is needed. Please add it to the \
             SystemConfig kind in the Google Datastore".format(required_param)
 
+    auth = tweepy.OAuthHandler(DB_CONFIG['TWITTER_API_KEY'], DB_CONFIG['TWITTER_API_SECRET'])
+    auth.set_access_token(DB_CONFIG['TWITTER_ACCESS_TOKEN'], DB_CONFIG['TWITTER_ACCESS_SECRET'])
+
     # Instantiate from our streaming class
-    stream = ServianTwitterStreamer(keyword_to_track,
-        DB_CONFIG['TWITTER_API_KEY'], DB_CONFIG['TWITTER_API_SECRET'],
-        DB_CONFIG['TWITTER_ACCESS_TOKEN'], DB_CONFIG['TWITTER_ACCESS_SECRET'],
-        on_receive_tweet=on_receive_tweet)
+    stream_listener = ServianTwitterStreamer(
+        keyword_to_track,
+        on_receive_tweet,
+        on_error,
+    )
+    stream = tweepy.Stream(auth=auth, listener=stream_listener)
 
     if return_object:
         return stream
     else:
         # Start the stream
-        stream.statuses.filter(track=keyword_to_track)
+        stream.filter(track=[keyword_to_track], is_async=True)
 
 
 if __name__ == '__main__':
-    client = init_google_cloud_client()
-
-    with client.context():
+    with init_google_cloud_client().context():
         # Load the system config from Google Datastore to
         # get our twitter config parameters
         DB_CONFIG = {

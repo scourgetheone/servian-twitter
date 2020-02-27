@@ -107,7 +107,7 @@ def create_streamer():
             )
 
             # Start the stream
-            stream.statuses.filter(track=STREAM_KEYWORD)
+            stream.filter(track=[STREAM_KEYWORD], is_async=True)
             return 'OK', 200
     else:
         print ('Twitter stream is already running, mate.')
