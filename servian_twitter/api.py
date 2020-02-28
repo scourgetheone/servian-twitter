@@ -84,9 +84,12 @@ def create_streamer():
         print ('Twitter stream is already running, mate.')
         return 'OK', 200
 
-def on_error():
+def on_error(status_code):
     """Handle errors from the stream object"""
-    pass
+    print ('There was an error with the Tweepy stream. Code: ', status_code)
+    stream = None
+    # Try to start a new stream
+    create_streamer()
 
 ### Socket.io functions ###
 def on_receive_tweet(tweet):

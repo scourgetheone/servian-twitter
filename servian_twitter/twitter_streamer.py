@@ -45,11 +45,10 @@ class ServianTwitterStreamer(tweepy.StreamListener):
             self.on_receive_tweet(tweet)
 
     # Problem with the API
-    def on_error(self, status_code, data):
-        print(status_code, data)
-        self.on_error(status_code, data)
-        # uncomment if we do *not* want to retry the stream
-        #self.disconnect()
+    def on_error(self, status_code):
+        print(status_code)
+        self.on_error(status_code)
+        return False
 
     def process_tweet(self, tweet):
         """Filter out unwanted data from a tweet
