@@ -21,7 +21,7 @@ initial_config_values = {
     'TWITTER_ACCESS_SECRET': 'jRvpNwBKvqiNDhkVItSj4yyCohGQNQ79VSyyCFyW5GweZ',
     'TWITTER_API_KEY': 'XJHHqegPrw0BohX8Grxp8lIOT',
     'TWITTER_API_SECRET': '6tebbwIHTN3iHbUfrlW8bOLkKGcr6cjoFPNnwpAaqxuFaeeIKF',
-    'TWITTER_STREAM_KEYWORD': 'servian',
+    'TWITTER_STREAM_KEYWORD': 'python',
     'TWEET_QUERY_LIMIT': '100',
 }
 
