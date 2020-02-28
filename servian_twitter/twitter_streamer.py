@@ -1,14 +1,13 @@
-import tweepy
-from google_cloud import (
-    Tweet,
-    SystemConfig,
-    init_google_cloud_client
-)
+
 from pytz import timezone
 
+import tweepy
 import datetime
 import random
 
+from servian_twitter import utils
+from servian_twitter.models import db
+import servian_twitter.models as models
 
 class ServianTwitterStreamer(tweepy.StreamListener):
     """A custom Twitter streamer class inherited from tweepy.StreamListener
@@ -24,7 +23,6 @@ class ServianTwitterStreamer(tweepy.StreamListener):
 
     on_receive_tweet = None
     stream_keyword = None
-    google_client = None
 
     def __init__(self,
         stream_keyword,
@@ -35,7 +33,6 @@ class ServianTwitterStreamer(tweepy.StreamListener):
         self.stream_keyword = stream_keyword
         self.on_receive_tweet = on_receive_tweet
         self.on_error = on_error
-        self.google_client = init_google_cloud_client()
 
     # Received data
     def on_status(self, data):
@@ -44,8 +41,7 @@ class ServianTwitterStreamer(tweepy.StreamListener):
         # Only collect tweets in English
         if data['lang'] == 'en':
             tweet = self.process_tweet(data)
-            print('got tweet', tweet)
-            self.save_to_datastore(tweet)
+            self.save_to_database(tweet)
             self.on_receive_tweet(tweet)
 
     # Problem with the API
@@ -69,8 +65,8 @@ class ServianTwitterStreamer(tweepy.StreamListener):
 
         avatar_color_index = random.randint(0, 12)
 
-        tweet_entity = Tweet(
-            id = str(tweet['id']),
+        tweet_entity = models.Tweet(
+            tweet_id = str(tweet['id']),
             avatar_color_index = avatar_color_index,
             stream_keyword = self.stream_keyword,
             created_at = created_at,
@@ -81,10 +77,10 @@ class ServianTwitterStreamer(tweepy.StreamListener):
         )
         return tweet_entity
 
-    # Save each tweet to Google's Datastore
-    def save_to_datastore(self, tweet):
-        with self.google_client.context():
-            tweet.put()
+    # Save each tweet to the database
+    def save_to_database(self, tweet):
+        db.session.add(tweet)
+        db.session.commit()
 
 REQUIRED_PARAMS = ['TWITTER_API_KEY', 'TWITTER_API_SECRET', 'TWITTER_ACCESS_TOKEN', 'TWITTER_ACCESS_SECRET']
 
@@ -94,8 +90,6 @@ def create_new_stream(
         on_receive_tweet=lambda x: None,
         on_error=lambda x: None):
     """ Create a new Twitter stream listener
-
-    Must be run under a Google Cloud client context.
 
     Args:
         keyword_to_track (str): the keyword to track with our Twitter streamer
@@ -107,14 +101,11 @@ def create_new_stream(
 
     # Load the system config from Google Datastore to
     # get our twitter config parameters
-    DB_CONFIG = {
-        config.key: config.value
-        for config in SystemConfig.query()
-    }
+    DB_CONFIG = utils.get_db_config()
 
     for required_param in REQUIRED_PARAMS:
         assert DB_CONFIG[required_param], "{} is needed. Please add it to the \
-            SystemConfig kind in the Google Datastore".format(required_param)
+            models.SystemConfig table".format(required_param)
 
     auth = tweepy.OAuthHandler(DB_CONFIG['TWITTER_API_KEY'], DB_CONFIG['TWITTER_API_SECRET'])
     auth.set_access_token(DB_CONFIG['TWITTER_ACCESS_TOKEN'], DB_CONFIG['TWITTER_ACCESS_SECRET'])
@@ -135,12 +126,8 @@ def create_new_stream(
 
 
 if __name__ == '__main__':
-    with init_google_cloud_client().context():
-        # Load the system config from Google Datastore to
-        # get our twitter config parameters
-        DB_CONFIG = {
-            config.key: config.value
-            for config in SystemConfig.query()
-        }
+    # Load the system config from Google Datastore to
+    # get our twitter config parameters
+    DB_CONFIG = utils.get_db_config()
 
-        create_new_stream(DB_CONFIG['TWITTER_STREAM_KEYWORD'])
+    create_new_stream(DB_CONFIG['TWITTER_STREAM_KEYWORD'])

@@ -3,5 +3,6 @@ tweepy
 gunicorn
 flask-socketio
 eventlet
-google-cloud-storage
-google-cloud-ndb
+flask_sqlalchemy
+pytz
+
