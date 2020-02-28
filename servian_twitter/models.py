@@ -9,7 +9,7 @@ import json
 class Tweet(db.Model):
     """Tweet entity stores basic information about a tweet"""
     id = db.Column(db.Integer, primary_key=True)
-    tweet_id = db.Column(db.String(256), unique=True, nullable=False) # The tweet Id that comes from Twitter
+    tweet_id = db.Column(db.String(256), nullable=False) # The tweet Id that comes from Twitter
     avatar_color_index = db.Column(db.Integer) # We generate a unique index for the UI's avatar display
     stream_keyword = db.Column(db.String(256)) # The keyword used in the stream that fetched this tweet
     created_at = db.Column(db.DateTime) # Datetime when the tweet was made. In UTC.
