@@ -38,7 +38,7 @@ export default function Body() {
 
     const fetchData = () => {
         request
-            .get('/load_previous_tweets')
+            .get('/api/load_previous_tweets')
             .then(res => {
                 setData(res.body);
                 setTweets(res.body.tweets);

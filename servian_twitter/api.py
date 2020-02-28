@@ -6,7 +6,7 @@ from servian_twitter import models
 from servian_twitter.models import db
 from servian_twitter import utils
 
-bp = Blueprint('api', __name__, '/api')
+bp = Blueprint('api', __name__, url_prefix='/api')
 
 #### Flask routes ###
 
