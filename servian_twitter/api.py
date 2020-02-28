@@ -34,7 +34,7 @@ def load_previous_tweets():
         'text': tweet.text,
         'user': tweet.user,
         'user_loc': tweet.user_loc,
-    } for tweet in query.all()]
+    } for tweet in query.limit(TWEET_QUERY_LIMIT).all()]
 
     return jsonify({
         'stream_keyword': STREAM_KEYWORD,
