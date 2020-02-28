@@ -5,8 +5,8 @@
 #
 
 # Remove previous react app bundles
-rm -r static/app.js
-rm -r static/app.*.js
+rm -r servian_twitter/static/app.js
+rm -r servian_twitter/static/app.*.js
 
 # Bundle the react app in production mode.
 pushd ui/ >/dev/null
@@ -17,8 +17,8 @@ popd >/dev/null
 hash=$(sha256sum static/app.js | head -c16)
 
 # Create the index.html file if not exist
-if [ ! -f /tmp/foo.txt ]; then
-    cat > templates/index.html <<EOF
+if [ ! -f servian_twitter/templates/index.html ]; then
+    cat > servian_twitter/templates/index.html <<EOF
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -34,7 +34,7 @@ EOF
 fi
 
 # Rename the bundled react app file using the hash
-mv static/app.js static/app.$hash.js
+mv servian_twitter/static/app.js servian_twitter/static/app.$hash.js
 
 # update the hash to the react app's script path in index.html
-sed -i "s/app[.0-9a-f]*\.js/app.$hash.js/" templates/index.html
+sed -i "s/app[.0-9a-f]*\.js/app.$hash.js/" servian_twitter/templates/index.html
