@@ -1,6 +1,0 @@
-indexes:
-- kind: Tweet
-  properties:
-    - name: stream_keyword
-    - name: created_at
-      direction: desc
