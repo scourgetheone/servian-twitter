@@ -10,7 +10,7 @@ jobs:
           - python setup.py develop
         script:
           - cd servian_twitter
-          - python init_db.py
+          - python init_db.py from_template
 
       - language: node_js
         node_js: 13
