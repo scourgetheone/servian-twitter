@@ -12,15 +12,12 @@ matrix:
       - language: node_js
         node_js: 13
         cache: yarn
-        before_script:
-          - cd ../
-          - cd ui
         script:
+          - cd ui
           - yarn install
           - yarn test
 
 before_deploy:
-- cd ../
 - bash build_ui.sh # Build the UI module
 - python servian_twitter/init_db.py # Initialize the SQLite database
 - openssl aes-256-cbc -K $encrypted_645f850629f0_key -iv $encrypted_645f850629f0_iv
