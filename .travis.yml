@@ -10,7 +10,6 @@ jobs:
           - python setup.py develop
         script:
           - cd servian_twitter
-          - python init_db.py from_template
 
       - language: node_js
         node_js: 13
@@ -28,6 +27,9 @@ jobs:
         - openssl aes-256-cbc -K $encrypted_645f850629f0_key -iv $encrypted_645f850629f0_iv
           -in hazel-tome-269200-2c4a7c4121d6.json.enc -out hazel-tome-269200-2c4a7c4121d6.json
           -d
+        - cd servian_twitter
+        - python init_db.py
+        - cd ../
 
         deploy:
             provider: gae
