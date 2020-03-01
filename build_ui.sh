@@ -10,12 +10,11 @@ rm -r servian_twitter/static/app.*.js
 
 # test and bundle the react app in production mode.
 pushd ui/ >/dev/null
-yarn test
 yarn build
 popd >/dev/null
 
 # Hash the file to prevent browser caching
-hash=$(sha256sum static/app.js | head -c16)
+hash=$(sha256sum servian_twitter/static/app.js | head -c16)
 
 # Create the index.html file if not exist
 if [ ! -f servian_twitter/templates/index.html ]; then
