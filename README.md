@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/scourgetheone/servian-twitter.svg?branch=master)](https://travis-ci.org/scourgetheone/servian-twitter.svg?branch=master)
+
 ## Servian Real-time Twitter Stream Project
 
 ### Requirements
