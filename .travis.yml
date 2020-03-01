@@ -23,7 +23,6 @@ jobs:
       - stage: deploy
         name: "Deploy to Google App Engine"
         before_deploy:
-        - cd ../
         - bash build_ui.sh # Build the UI module
         - openssl aes-256-cbc -K $encrypted_645f850629f0_key -iv $encrypted_645f850629f0_iv
           -in hazel-tome-269200-2c4a7c4121d6.json.enc -out hazel-tome-269200-2c4a7c4121d6.json
