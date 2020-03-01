@@ -8,9 +8,10 @@
 rm -r servian_twitter/static/app.js
 rm -r servian_twitter/static/app.*.js
 
-# Bundle the react app in production mode.
+# test and bundle the react app in production mode.
 pushd ui/ >/dev/null
-webpack --mode production
+yarn test
+yarn build
 popd >/dev/null
 
 # Hash the file to prevent browser caching

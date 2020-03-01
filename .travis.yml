@@ -14,7 +14,7 @@ matrix:
           - cd ui
         script:
           - yarn install
-          - yarn test
+          - bash ../build_ui.sh
 
 before_deploy:
 - cd ../
