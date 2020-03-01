@@ -8,5 +8,9 @@ matrix:
         #     - python -m unittest discover
 
       - language: node_js
+        node_js: 12
         before_script:
           - cd ui
+        script:
+          - yarn install
+          - yarn test
