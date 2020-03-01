@@ -6,13 +6,12 @@ import {
     CircularProgress,
 } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
-import 'typeface-roboto';
-import request from 'superagent';
+//import 'typeface-roboto';
 import io from 'socket.io-client';
 const env = process.env.NODE_ENV;
 
-import Tweet from 'components/Tweet';
-import MainStyles from 'styles/MainStyles';
+import Tweet from './Tweet';
+import MainStyles from '../styles/MainStyles';
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -37,11 +36,11 @@ export default function Body() {
     const [openErrorSnackbar, setOpenErrorSnackbar] = React.useState(false);
 
     const fetchData = () => {
-        request
-            .get('/api/load_previous_tweets')
-            .then(res => {
-                setData(res.body);
-                setTweets(res.body.tweets);
+        fetch('/api/load_previous_tweets')
+            .then(res => res.json())
+            .then((data) => {
+                setData(data);
+                setTweets(data.tweets);
             })
             .catch(err => {
                 setErrorMessage(`${err.message}. Response code: ${err.response}`);

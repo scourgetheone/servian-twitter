@@ -18,6 +18,7 @@
         "location": "readonly",
         "process": "readonly",
         "setTimeout": "readonly",
-        "clearTimeout": "readonly"
+        "clearTimeout": "readonly",
+        "fetch": "readonly"
     }
 }

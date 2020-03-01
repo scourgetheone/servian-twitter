@@ -7,7 +7,7 @@ import {
     Fade,
 } from '@material-ui/core';
 
-import TweetStyles from 'styles/TweetStyles';
+import TweetStyles from '../styles/TweetStyles';
 
 export default function Tweet(props) {
     // Set the props
@@ -86,7 +86,7 @@ export default function Tweet(props) {
     let createdAtDate = new Date(tweetData.created_at);
     createdAtDate = createdAtDate.toString().split('GMT')[0]; // HACK: remove the timezone
     const tweetHeader = `On ${createdAtDate} from
-        ${tweetData.user_loc || 'an unknown location'}, `;
+        ${tweetData.user_loc || 'an unknown location'},`;
 
     const colorArray = [
         'orange', 'purple', 'pink', 'red', 'blue', 'cyan', 'blueGrey',
