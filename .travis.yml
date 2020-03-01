@@ -1,3 +1,5 @@
+language: generic
+
 jobs:
     include:
       - stage: "Compile and tests"
