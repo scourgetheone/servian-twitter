@@ -2,6 +2,3 @@ cron:
 - description: "daily tweet clearance"
   url: /api/cron_delete_all_tweets
   schedule: every 24 hours
-- description: "start up the stream once in a while"
-  url: /api/cron_create_streamer
-  schedule: every 1 hours

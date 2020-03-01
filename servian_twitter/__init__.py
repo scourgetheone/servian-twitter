@@ -32,4 +32,6 @@ app.register_blueprint(bp)
 
 
 if __name__ == '__main__':
+    from servian_twitter.api import create_streamer
+    create_streamer()
     socketio.run(app, host='127.0.0.1', port=5000, debug=True)
