@@ -3,6 +3,7 @@ tweepy
 gunicorn
 flask-socketio
 eventlet
+sqlalchemy_utils
 flask_sqlalchemy
 pytz
 
