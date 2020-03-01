@@ -32,11 +32,15 @@ if not database_exists(CONFIG['SQLITE_URL']):
         'TWEET_QUERY_LIMIT': '100',
     }
 
-    for key, value in initial_config_values.items():
-        config = SystemConfig(key=key, value=value)
-        db.session.add(config)
+    try:
+        for key, value in initial_config_values.items():
+            config = SystemConfig(key=key, value=value)
+            db.session.add(config)
 
-    db.session.commit()
+        db.session.commit()
+    except Exception as e:
+        print ('Error while trying to add initial values')
+        print (e)
 
     print ('Database created!')
 else:
