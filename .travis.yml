@@ -2,9 +2,11 @@ matrix:
     include:
       - language: python
         python: 3.7
-        before_script:
-          - cd servian_twitter
+        install:
+          - pip install -r requirements.txt
+          - python setup.py develop
         script:
+          - cd servian_twitter
           - python init_db.py
 
       - language: node_js

@@ -13,7 +13,7 @@ from sqlalchemy_utils import database_exists
 import os
 import json
 
-from models import db, SystemConfig
+from servian_twitter.models import db, SystemConfig
 
 print ('Preparing to create database with some initial config settings.')
 
