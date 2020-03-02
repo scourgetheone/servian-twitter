@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/scourgetheone/servian-twitter.svg?token=Xfdvmn4bpqfYznjNk9P6&branch=master)](https://travis-ci.org/scourgetheone/servian-twitter)
+[![Build Status](https://travis-ci.com/scourgetheone/servian-twitter.svg?token=Xfdvmn4bpqfYznjNk9P6&branch=master)](https://travis-ci.com/scourgetheone/servian-twitter)
 
 ## Servian Real-time Twitter Stream Project
 
