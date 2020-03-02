@@ -2,7 +2,7 @@ language: generic
 
 jobs:
     include:
-      - stage: "Compile and tests"
+      - stage: "Compile and test python backend"
       - language: python
         python: 3.7
         install:
@@ -13,7 +13,7 @@ jobs:
           - pytest -v -m "not index_test"
 
       - stage: deploy
-        name: "Deploy to Google App Engine"
+        name: "Compile and test UI, then deploy to Google App Engine"
       - language: node_js
         node_js: 13
         cache: yarn
@@ -22,9 +22,9 @@ jobs:
           - yarn install
           - yarn test
           - cd ../
-          - bash build_ui.sh # Build the UI module
 
         before_deploy:
+        - bash build_ui.sh # Build the UI module. Must be done in deploy stage, because we generate the index.html file
         - openssl aes-256-cbc -K $encrypted_645f850629f0_key -iv $encrypted_645f850629f0_iv
           -in hazel-tome-269200-2c4a7c4121d6.json.enc -out hazel-tome-269200-2c4a7c4121d6.json
           -d
