@@ -10,11 +10,14 @@ from servian_twitter.twitter_streamer import ServianTwitterStreamer
 with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'config.json')) as f:
     CONFIG = json.load(f)
 
+db_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), CONFIG['SQLITE_TEST_DB_NAME'])
+db_uri = 'sqlite:///{}'.format(db_path)
+
 @pytest.fixture
 def client():
     settings_override = {
         'TESTING': True,
-        'SQLALCHEMY_DATABASE_URI': CONFIG['SQLITE_TEST_URL']
+        'SQLALCHEMY_DATABASE_URI': db_uri
     }
 
     # Establish an application context before running the tests.
@@ -28,13 +31,12 @@ def client():
 @pytest.fixture
 def _db():
     with app.app_context():
-        init_db(CONFIG['SQLITE_TEST_URL'])
+        init_db(CONFIG['SQLITE_TEST_DB_NAME'])
         yield db
-        db.drop_all()
-        db.session.commit()
 
     db.drop_all()
-    os.unlink(CONFIG['SQLITE_TEST_PATH'])
+    os.unlink(db_path)
+
 
 class MockTweet():
     _json = dict()

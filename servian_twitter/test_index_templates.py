@@ -13,7 +13,6 @@ with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'config.json'
 def client():
     settings_override = {
         'TESTING': True,
-        'SQLALCHEMY_DATABASE_URI': CONFIG['SQLITE_TEST_URL']
     }
 
     # Establish an application context before running the tests.

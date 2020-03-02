@@ -8,11 +8,13 @@ import os
 app = Flask(__name__)
 
 # Load up the json config file
-with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'config.json')) as f:
+with open(os.path.join(os.path.dirname(__file__), 'config.json')) as f:
     CONFIG = json.load(f)
 app.config['SECRET_KEY'] = CONFIG['SECRET_KEY']
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = CONFIG['SQLITE_URL']
+
+db_path = os.path.join(os.path.dirname(__file__), CONFIG['SQLITE_DB_NAME'])
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///{}'.format(db_path)
 
 socketio = SocketIO(app)
 

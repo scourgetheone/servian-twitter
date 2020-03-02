@@ -6,7 +6,7 @@
 
 # test and bundle the react app in production mode.
 pushd servian_twitter/ >/dev/null
-python init_db.py
+python init_db.py from_template
 popd >/dev/null
 
 if [ -z ${PORT+x} ]; then
