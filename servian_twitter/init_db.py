@@ -9,13 +9,14 @@ import os
 import json
 import sys
 
-from servian_twitter.models import db, SystemConfig
 
 with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'config.json')) as f:
     CONFIG = json.load(f)
 
 def init_db():
     print ('Preparing to create database with some initial config settings.')
+
+    from servian_twitter.models import db, SystemConfig
 
     if not database_exists(CONFIG['SQLITE_URL']):
         db.create_all()
@@ -51,7 +52,6 @@ def copy_from_template():
     print ('Preparing to create a new database from an existing template.')
 
     if not database_exists(CONFIG['SQLITE_URL']):
-        import os
         import shutil
 
         # Source path
