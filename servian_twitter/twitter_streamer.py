@@ -68,7 +68,7 @@ class ServianTwitterStreamer(tweepy.StreamListener):
         avatar_color_index = random.randint(0, 12)
 
         tweet_entity = models.Tweet(
-            tweet_id = str(tweet['id']),
+            tweet_id = str(tweet['id']) + ' ad',
             avatar_color_index = avatar_color_index,
             stream_keyword = self.stream_keyword,
             created_at = created_at,
