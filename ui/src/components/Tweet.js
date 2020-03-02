@@ -84,7 +84,7 @@ export default function Tweet(props) {
 
     // Tweet creation time and tweet header line //
     let createdAtDate = new Date(tweetData.created_at);
-    createdAtDate = createdAtDate.toString(); // HACK: remove the timezone
+    createdAtDate = createdAtDate.toString().split('GMT')[0]; // HACK: remove the timezone
     const tweetHeader = `On ${createdAtDate} from
         ${tweetData.user_loc || 'an unknown location'},`;
 
