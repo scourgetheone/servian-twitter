@@ -36,7 +36,7 @@ The code architecture is summarized in the diagram below
 - The React SPA has the socket.io client api which receives messages from the Flask server every time a new tweet comes in.
 - A new tweet is detected using Twitter's streaming API via [tweepy](http://docs.tweepy.org/en/v3.4.0/streaming_how_to.html).
 - Tweets are archived into an SQLite database, so that every time users first open the webapp, they will not see a blank page.
-- The application code is hosted on Github, which is watched by Travis CI who tests, builds, and deploys the application automatically to GAE when a new commit comes into the master branch.
+- The application code is hosted on Github, which is watched by Travis CI who tests the application.
 - The system config is stored in a SQLite Database (previously in a json file). Right now the system config holds the Twitter API credentials as well as certain configuration to the presentation of tweet data to the client-side React SPA.
 
 ### Technology rationale
