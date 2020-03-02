@@ -13,12 +13,17 @@ import sys
 with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'config.json')) as f:
     CONFIG = json.load(f)
 
-def init_db():
+def init_db(SQLITE_URL=None):
+    # TODO: pro
+
     print ('Preparing to create database with some initial config settings.')
 
     from servian_twitter.models import db, SystemConfig
 
-    if not database_exists(CONFIG['SQLITE_URL']):
+    if not SQLITE_URL:
+        SQLITE_URL = CONFIG['SQLITE_URL']
+
+    if not database_exists(SQLITE_URL):
         db.create_all()
 
         initial_config_values = {

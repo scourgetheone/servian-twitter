@@ -6,4 +6,4 @@ eventlet
 sqlalchemy_utils
 flask_sqlalchemy
 pytz
-
+pytest

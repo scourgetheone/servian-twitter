@@ -10,6 +10,7 @@ jobs:
           - python setup.py develop
         script:
           - cd servian_twitter
+          - pytest
 
       - language: node_js
         node_js: 13

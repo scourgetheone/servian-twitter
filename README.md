@@ -44,3 +44,5 @@ Update the Datastore index:
 4. https://googleapis.dev/python/python-ndb/latest/index.html
 5. https://material-ui.com/
 6. https://reactjs.org/docs
+7. https://www.valentinog.com/blog/testing-react/
+8. http://alexmic.net/flask-sqlalchemy-pytest/

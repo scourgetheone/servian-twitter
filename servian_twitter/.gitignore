@@ -1,4 +1,5 @@
 __pycache__/
 *.pyc
 servian_twitter.db
+servian_twitter_test.db
 templates/index.html

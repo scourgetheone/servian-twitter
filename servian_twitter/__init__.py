@@ -32,9 +32,10 @@ app.register_blueprint(bp)
 
 @app.before_first_request
 def execute_this():
-    # Initiate the streamer
-    from servian_twitter.api import create_streamer
-    create_streamer()
+    if not app.config['TESTING']:
+        # Initiate the streamer
+        from servian_twitter.api import create_streamer
+        create_streamer()
 
 if __name__ == '__main__':
     socketio.run(app, host='127.0.0.1', port=5000, debug=True)

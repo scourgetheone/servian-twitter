@@ -1,5 +1,7 @@
 {
     "SQLITE_URL": "sqlite:///servian_twitter.db",
+    "SQLITE_TEST_URL": "sqlite:///servian_twitter_test.db",
+    "SQLITE_TEST_PATH": "./servian_twitter_test.db",
     "GCP_PROJECT_ID": "hazel-tome-269200",
     "SECRET_KEY": "1231safdSDF<sdk0918734af!?asdfam,-.sa<sDaf134",
     "TWEET_QUERY_LIMIT": 100
