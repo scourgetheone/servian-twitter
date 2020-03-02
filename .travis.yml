@@ -28,7 +28,7 @@ jobs:
           -in hazel-tome-269200-2c4a7c4121d6.json.enc -out hazel-tome-269200-2c4a7c4121d6.json
           -d
         - cd servian_twitter
-        - pip install sqlalchemy_utils
+        - pip install --user sqlalchemy_utils
         - python init_db.py from_template
         - cd ../
 
