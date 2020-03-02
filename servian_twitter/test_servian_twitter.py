@@ -3,10 +3,6 @@ import tempfile
 import pytest
 import json
 import datetime
-import fnmatch
-
-
-from sqlalchemy_utils import drop_database
 
 from servian_twitter import app, socketio
 from servian_twitter.models import db, Tweet, SystemConfig
@@ -41,40 +37,6 @@ def _db():
     db.drop_all()
     os.unlink(CONFIG['SQLITE_TEST_PATH'])
 
-def test_get_index_page(client):
-    """Make sure the index.html page loads"""
-
-    rv = client.get('/')
-    assert b'<title>Servian Real-time Tweet Stream</title>' in rv.data
-
-def find(pattern, path):
-    """Finds files matching pattern
-
-    https://stackoverflow.com/a/1724723
-    """
-    result = []
-    for root, dirs, files in os.walk(path):
-        for name in files:
-            if fnmatch.fnmatch(name, pattern):
-                result.append(os.path.join(root, name))
-    return result
-
-def test_get_index_page_app_js(client):
-    """Make sure the app.*.js file exists and index.html references it"""
-
-    # Find the bundled react module file
-    filename = find('app.*.js', 'static')
-    rv = client.get('/')
-
-    assert len(filename) == 1
-    assert filename[0].split('static/')[1].encode() in rv.data
-
-def test_get_dev_page(client):
-    """Make sure the index_dev.html page loads"""
-
-    rv = client.get('/dev')
-    assert b'<title>Servian Real-time Tweet Stream</title>' in rv.data
-    assert b'src="http://localhost:8080/app.js"' in rv.data
 
 def test_create_tweet(_db, client):
     """Create some tweets"""

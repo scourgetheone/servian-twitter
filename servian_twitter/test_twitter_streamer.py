@@ -1,12 +1,6 @@
 import os
-import tempfile
 import pytest
 import json
-import datetime
-import fnmatch
-
-
-from sqlalchemy_utils import drop_database
 
 from servian_twitter import app, socketio
 from servian_twitter.models import db, Tweet, SystemConfig
