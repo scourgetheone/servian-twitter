@@ -5,7 +5,7 @@ db = SQLAlchemy(app)
 
 import json
 
-# Google Datastore Entity definitions
+# SQLite table definitions
 class Tweet(db.Model):
     """Tweet entity stores basic information about a tweet"""
     id = db.Column(db.Integer, primary_key=True)
@@ -22,7 +22,6 @@ class SystemConfig(db.Model):
     """SystemConfig entity stores key value entities
 
     Useful for storing config parameters.
-
     """
     key = db.Column(db.String(512), primary_key=True)
     value = db.Column(db.String(512))

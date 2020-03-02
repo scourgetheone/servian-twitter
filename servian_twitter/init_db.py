@@ -50,8 +50,9 @@ def init_db(SQLITE_DB_NAME=None):
 
 def copy_from_template():
     """Copy a template starting database from the travis_templates folder
-    This is a workaround because the Travis CI build environment doesn't
-    seem to run the init_db() function above properly.
+
+    TODO: This is a workaround because GAE for some reason creates an empty database
+    with no initial data. Works locally though.
     """
     db_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), CONFIG['SQLITE_DB_NAME'])
 

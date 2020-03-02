@@ -49,7 +49,10 @@ class MockTweet():
 
 
 def test_receive_tweet(_db, client):
-    """Mock test receiving of a tweet from Twitter's API"""
+    """Mock test receiving of a tweet from Twitter's API
+
+    This also tests adding a new tweet to the database (via on_status)
+    """
 
     # connect to Socket.IO
     socketio_test_client = socketio.test_client(

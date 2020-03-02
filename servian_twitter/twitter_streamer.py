@@ -18,7 +18,7 @@ class ServianTwitterStreamer(tweepy.StreamListener):
             stream_keyword (str): a keyword that we are tracking using the StreamListener
             on_receive_tweet (func): a callback function used when a tweet matching the
             stream keyword is received.
-
+            on_error (func): a callback function used when there is an error
     """
 
     on_receive_tweet = None
@@ -55,6 +55,9 @@ class ServianTwitterStreamer(tweepy.StreamListener):
 
             Args:
                 tweet: a dictionary containing information about a tweet
+
+            Returns:
+                a models.Tweet object
         """
         # Parse the date time string with '%a %b %d %H:%M:%S %z %Y' format.
         # #Example date time from twitter: Wed Feb 26 00:13:42 +0000 2020
@@ -95,6 +98,9 @@ def create_new_stream(
         return_object (bool): returns the ServianTwitterStreamer object instead of running the stream
         on_receive_tweet (func): a callback function when a real-time tweet is received
         on_error (func): a callback function when there is an error from the stream API
+
+    Returns:
+        a tweepy.Stream object if return_object is True.
 
     """
 
