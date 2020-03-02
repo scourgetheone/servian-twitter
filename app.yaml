@@ -19,4 +19,4 @@ runtime_config:
 manual_scaling:
   instances: 1
 
-entrypoint: gunicorn -b :$PORT -k eventlet servian_twitter:app
+entrypoint: ./start_server.sh
